@@ -44,7 +44,7 @@ export class DocumentsContainer extends HTMLElement {
     const viewSelector = this.querySelector('view-selector')
     if (viewSelector) {
       viewSelector.addEventListener('viewChange', ((event: CustomEvent) => {
-        this.currentView = event.detail.view
+        this.currentView = event.detail
         const content = this.querySelector('#documents-content')
         if (content) {
           content.innerHTML =

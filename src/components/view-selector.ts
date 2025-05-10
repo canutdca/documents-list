@@ -3,6 +3,8 @@ import { gridIcon } from '../icons/grid'
 
 export class ViewSelector extends HTMLElement {
   private currentView: 'list' | 'cards' = 'list'
+  private readonly baseStyles =
+    'p-2 rounded-md transition-colors duration-200 hover:bg-blue-600'
 
   constructor() {
     super()
@@ -14,65 +16,76 @@ export class ViewSelector extends HTMLElement {
 
   setView(view: 'list' | 'cards') {
     this.currentView = view
-    this.updateButtons()
+    this.updateView()
   }
 
-  private updateButtons() {
-    const listViewButton = this.querySelector('#list-view')
-    const cardsViewButton = this.querySelector('#cards-view')
+  private updateView() {
+    const listViewInput = this.querySelector('#list-view') as HTMLInputElement
+    const cardsViewInput = this.querySelector('#cards-view') as HTMLInputElement
 
-    if (!listViewButton || !cardsViewButton) return
+    if (!listViewInput?.parentElement || !cardsViewInput?.parentElement) return
 
-    listViewButton.className = `p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`
-    cardsViewButton.className = `p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'cards' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`
+    listViewInput.checked = this.currentView === 'list'
+    cardsViewInput.checked = this.currentView === 'cards'
+
+    listViewInput.parentElement.className = `${this.baseStyles} ${this.currentView === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`
+    cardsViewInput.parentElement.className = `${this.baseStyles} ${this.currentView === 'cards' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`
   }
 
   private render() {
     this.innerHTML = `
       <div class="flex gap-2" role="radiogroup" aria-label="Select view type">
-        <button 
-          id="list-view" 
-          class="p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}"
-          aria-pressed="${this.currentView === 'list'}"
-          aria-label="List view"
-        >
+        <label>
+          <input 
+            type="radio" 
+            id="list-view" 
+            name="view" 
+            value="list" 
+            ${this.currentView === 'list' ? 'checked' : ''}
+            class="hidden"
+            aria-label="List view"
+          />
           ${listIcon}
-        </button>
-        <button 
-          id="cards-view" 
-          class="p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'cards' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}"
-          aria-pressed="${this.currentView === 'cards'}"
-          aria-label="Cards view"
-        >
+        </label>
+        <label>
+          <input 
+            type="radio" 
+            id="cards-view" 
+            name="view" 
+            value="cards"
+            ${this.currentView === 'cards' ? 'checked' : ''}
+            class="hidden" 
+            aria-label="Cards view"
+          />
           ${gridIcon}
-        </button>
+        </label>
       </div>
     `
     this.setupEventListeners()
   }
 
-  private setupEventListeners() {
-    const listViewButton = this.querySelector('#list-view')
-    const cardsViewButton = this.querySelector('#cards-view')
+  public setupEventListeners() {
+    const listViewInput = this.querySelector('#list-view') as HTMLInputElement
+    const cardsViewInput = this.querySelector('#cards-view') as HTMLInputElement
 
-    if (!listViewButton || !cardsViewButton) return
+    if (!listViewInput || !cardsViewInput) return
 
-    listViewButton.addEventListener('click', () => {
+    listViewInput.addEventListener('change', () => {
       this.currentView = 'list'
-      this.updateButtons()
+      this.updateView()
       const event = new CustomEvent('viewChange', {
-        detail: { view: 'list' },
+        detail: 'view',
         bubbles: true,
         composed: true,
       })
       this.dispatchEvent(event)
     })
 
-    cardsViewButton.addEventListener('click', () => {
+    cardsViewInput.addEventListener('change', () => {
       this.currentView = 'cards'
-      this.updateButtons()
+      this.updateView()
       const event = new CustomEvent('viewChange', {
-        detail: { view: 'cards' },
+        detail: 'cards',
         bubbles: true,
         composed: true,
       })
