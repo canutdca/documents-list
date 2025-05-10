@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Notifications } from './notifications'
 import type { NotificationsRepository } from '../repositories/notifications.repository'
+import { screen } from '@testing-library/dom'
+import '@testing-library/jest-dom'
 
 class MockNotificationsRepository implements NotificationsRepository {
   private callback: (() => void) | null = null
@@ -31,27 +33,40 @@ describe('Notifications', () => {
   })
 
   it('should render the component correctly', () => {
-    const container = document.querySelector('.fixed')
-    expect(container).not.toBeNull()
-    expect(container?.classList.contains('hidden')).toBe(true)
+    expect(
+      document.querySelector('notifications-component')
+    ).toBeInTheDocument()
+  })
+
+  it('should be hidden on startup', () => {
+    const container = screen.getByRole('status', {
+      name: 'New documents created alert',
+    })
+    expect(container).toHaveClass('hidden')
   })
 
   it('should show notification when one is received', () => {
     mockRepository.simulateNotification()
 
-    const container = document.querySelector('.fixed')
-    expect(container?.classList.contains('hidden')).toBe(false)
+    const container = screen.getByRole('status', {
+      name: 'New documents created alert',
+    })
+    expect(container).not.toHaveClass('hidden')
 
-    const counter = document.querySelector('.absolute')
-    expect(counter?.textContent).toBe('1')
+    const counter = screen.getByRole('status', {
+      name: 'Counter of new documents created',
+    })
+    expect(counter).toHaveTextContent('1')
   })
 
   it('should increment counter when multiple notifications are received', () => {
     mockRepository.simulateNotification()
     mockRepository.simulateNotification()
 
-    const counter = document.querySelector('.absolute')
-    expect(counter?.textContent).toBe('2')
+    const counter = screen.getByRole('status', {
+      name: 'Counter of new documents created',
+    })
+    expect(counter).toHaveTextContent('2')
   })
 
   it('should clean up repository when component is disconnected', () => {

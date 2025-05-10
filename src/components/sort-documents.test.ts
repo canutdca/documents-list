@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { SortDocuments } from './sort-documents'
+import { screen, within, fireEvent } from '@testing-library/dom'
+import '@testing-library/jest-dom'
 
 describe('SortDocuments', () => {
   let sortDocuments: SortDocuments
@@ -10,29 +12,38 @@ describe('SortDocuments', () => {
   })
 
   it('should render the sort selector', () => {
-    expect(document.querySelector('sort-documents')).not.toBeNull()
+    expect(screen.getByRole('group', { name: 'Sort by:' })).toBeInTheDocument()
   })
 
-  it('should render all sort options', () => {
-    const options = document.querySelectorAll('option')
-    expect(options.length).toBe(4)
-    expect(options[0].textContent).toBe('Select one...')
-    expect(options[1].textContent).toBe('Name')
-    expect(options[2].textContent).toBe('Version')
-    expect(options[3].textContent).toBe('Creation date')
+  it('should render sort options', () => {
+    const select = screen.getByRole('combobox', {
+      name: 'Select sorting criteria',
+    })
+    const options = within(select).getAllByRole('option')
+
+    expect(options).toHaveLength(4)
+    expect(options[0]).toHaveTextContent('Select one...')
+    expect(options[1]).toHaveTextContent('Name')
+    expect(options[2]).toHaveTextContent('Version')
+    expect(options[3]).toHaveTextContent('Creation date')
   })
 
-  it('should have "empty" as the default sort option', () => {
-    const select = document.querySelector('select') as HTMLSelectElement
-    expect(select.value).toBe('')
+  it('should have empty value as the default sort option', () => {
+    const select = screen.getByRole('combobox', {
+      name: 'Select sorting criteria',
+    })
+    expect(select).toHaveValue('')
   })
 
   it('should emit sortChange event when changing sort option', () => {
-    const select = document.querySelector('select') as HTMLSelectElement
+    const select = screen.getByRole('combobox', {
+      name: 'Select sorting criteria',
+    })
     const eventSpy = vi.fn()
     sortDocuments.addEventListener('sortChange', eventSpy)
-    select.value = 'version'
-    select.dispatchEvent(new Event('change'))
+
+    fireEvent.change(select, { target: { value: 'version' } })
+
     expect(eventSpy).toHaveBeenCalledWith(
       expect.objectContaining({ detail: 'version' })
     )
@@ -40,7 +51,9 @@ describe('SortDocuments', () => {
 
   it('should update selected sort option when setSort is called', () => {
     sortDocuments.setSort('version')
-    const select = document.querySelector('select') as HTMLSelectElement
-    expect(select.value).toBe('version')
+    const select = screen.getByRole('combobox', {
+      name: 'Select sorting criteria',
+    })
+    expect(select).toHaveValue('version')
   })
 })
