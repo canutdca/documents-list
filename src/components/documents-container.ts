@@ -1,5 +1,4 @@
 import type { Document } from '../models/document.model'
-import type { DocumentForm } from './document-form'
 import { getDocuments } from '../repositories/get-documents.repository'
 
 interface ViewSelector extends HTMLElement {
