@@ -1,4 +1,5 @@
 import type { Document } from '../models/document.model'
+import type { DocumentForm } from './document-form'
 import { getDocuments } from '../repositories/get-documents.repository'
 
 interface ViewSelector extends HTMLElement {
@@ -29,6 +30,7 @@ export class DocumentsContainer extends HTMLElement {
       <div id="documents-content" class="mt-8">
         ${this.currentView === 'list' ? '<documents-list></documents-list>' : '<documents-cards></documents-cards>'}
       </div>
+      <document-form></document-form>
     `
     this.updateDocuments()
     this.updateViewSelector()
@@ -47,6 +49,16 @@ export class DocumentsContainer extends HTMLElement {
               : '<documents-cards></documents-cards>'
           this.updateDocuments()
         }
+      }) as EventListener)
+    }
+
+    const documentForm = this.querySelector('document-form')
+    if (documentForm) {
+      documentForm.addEventListener('documentCreated', ((
+        event: CustomEvent
+      ) => {
+        this.documents = [...this.documents, event.detail.document]
+        this.updateDocuments()
       }) as EventListener)
     }
   }

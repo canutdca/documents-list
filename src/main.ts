@@ -3,6 +3,7 @@ import './components/documents-container'
 import './components/documents-list'
 import './components/documents-cards'
 import './components/view-selector'
+import './components/document-form'
 
 const container = document.getElementById('documents-container')
 
