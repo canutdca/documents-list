@@ -44,11 +44,10 @@ export class DocumentForm extends HTMLElement {
               Version <span class="text-red-500" aria-hidden="true">*</span>
             </label>
             <input 
-              type="number" 
+              type="text" 
               id="document-version" 
               name="version" 
               required
-              min="1"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-required="true"
             >
@@ -126,6 +125,7 @@ export class DocumentForm extends HTMLElement {
 
       const newDocument: Document = {
         id: crypto.randomUUID(),
+        createdAt: new Date(),
         name,
         version,
         contributors,
