@@ -8,6 +8,7 @@ interface ViewSelector extends HTMLElement {
 export class DocumentsContainer extends HTMLElement {
   private documents: Document[] = []
   private currentView: 'list' | 'cards' = 'list'
+  private currentSort: string = ''
 
   constructor() {
     super()
@@ -25,7 +26,10 @@ export class DocumentsContainer extends HTMLElement {
 
   private render() {
     this.innerHTML = `
-      <view-selector></view-selector>
+      <div class="flex justify-between items-center mb-6">
+        <sort-documents></sort-documents>
+        <view-selector></view-selector>
+      </div>
       <div id="documents-content" class="mt-8">
         ${this.currentView === 'list' ? '<documents-list></documents-list>' : '<documents-cards></documents-cards>'}
       </div>
@@ -51,6 +55,15 @@ export class DocumentsContainer extends HTMLElement {
       }) as EventListener)
     }
 
+    const sortDocuments = this.querySelector('sort-documents')
+    if (sortDocuments) {
+      sortDocuments.addEventListener('sortChange', ((event: CustomEvent) => {
+        this.currentSort = event.detail
+        this.sortDocuments()
+        this.updateDocuments()
+      }) as EventListener)
+    }
+
     const documentForm = this.querySelector('document-form')
     if (documentForm) {
       documentForm.addEventListener('documentCreated', ((
@@ -60,6 +73,33 @@ export class DocumentsContainer extends HTMLElement {
         this.updateDocuments()
       }) as EventListener)
     }
+  }
+
+  private sortDocuments() {
+    if (!this.currentSort) return
+
+    this.documents.sort((a, b) => {
+      let valueA: string | number | Date
+      let valueB: string | number | Date
+
+      switch (this.currentSort) {
+        case 'name':
+          valueA = a.name.toLowerCase()
+          valueB = b.name.toLowerCase()
+          break
+        case 'version':
+          valueA = a.version
+          valueB = b.version
+          break
+        case 'createdAt':
+          valueA = new Date(a.createdAt)
+          valueB = new Date(b.createdAt)
+          break
+        default:
+          return 0
+      }
+      return valueA < valueB ? -1 : 1
+    })
   }
 
   private updateViewSelector() {

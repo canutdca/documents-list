@@ -4,4 +4,5 @@ export interface Document {
   version: string
   contributors: string[]
   attachments: string[]
+  createdAt: Date
 }

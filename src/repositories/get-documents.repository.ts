@@ -7,6 +7,7 @@ export async function getDocuments(): Promise<Document[]> {
     .then((data: DocumentsResponse) =>
       data.map((doc: DocumentResponse) => ({
         id: doc.ID,
+        createdAt: new Date(doc.CreatedAt),
         name: doc.Title,
         version: doc.Version,
         contributors: doc.Contributors.map((c) => c.Name),
@@ -18,6 +19,7 @@ export async function getDocuments(): Promise<Document[]> {
 type DocumentsResponse = DocumentResponse[]
 interface DocumentResponse {
   ID: string
+  CreatedAt: string
   Title: string
   Attachments: string[]
   Contributors: {

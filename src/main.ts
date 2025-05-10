@@ -5,6 +5,7 @@ import './components/documents-cards'
 import './components/view-selector'
 import './components/document-form'
 import './components/notifications'
+import './components/sort-documents'
 
 const container = document.getElementById('documents-container')
 
