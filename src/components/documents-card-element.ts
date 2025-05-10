@@ -14,7 +14,7 @@ export class DocumentsCardElement extends HTMLElement {
 
   private render() {
     this.innerHTML = `
-      <article class="bg-white rounded-lg p-6 shadow-sm h-full">
+      <article class="bg-white rounded-lg p-6 shadow-sm h-full text-center">
         <div class="flex flex-col gap-4">
           <div>
             <h3 class="text-xl font-bold text-gray-900">${this.document.name}</h3>
@@ -22,27 +22,17 @@ export class DocumentsCardElement extends HTMLElement {
           </div>
           
           <div>
-            <h4 class="font-medium text-gray-700 mb-2">Contribuidores</h4>
-            <div class="flex flex-wrap gap-2">
+            <div>
               ${this.document.contributors
-                .map(
-                  (c) => `
-                <div class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-600">${c}</div>
-              `
-                )
+                .map((c) => `<div class="text-sm text-gray-600">${c}</div>`)
                 .join('')}
             </div>
           </div>
 
           <div>
-            <h4 class="font-medium text-gray-700 mb-2">Archivos adjuntos</h4>
-            <div class="flex flex-wrap gap-2">
+            <div>
               ${this.document.attachments
-                .map(
-                  (a) => `
-                <div class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-600">${a}</div>
-              `
-                )
+                .map((a) => `<div class="text-sm text-gray-600">${a}</div>`)
                 .join('')}
             </div>
           </div>

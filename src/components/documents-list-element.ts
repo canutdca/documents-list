@@ -21,12 +21,12 @@ export class DocumentsListElement extends HTMLElement {
         </div>
         <div role="cell">
           ${this.document.contributors
-            .map((c) => `<div class="pb-1 text-sm text-gray-600">${c}</div>`)
+            .map((c) => `<div class="text-sm text-gray-600">${c}</div>`)
             .join('')}
         </div>
         <div role="cell">
           ${this.document.attachments
-            .map((a) => `<div class="pb-1 text-sm text-gray-600">${a}</div>`)
+            .map((a) => `<div class="text-sm text-gray-600">${a}</div>`)
             .join('')}
         </div>
       </article>
