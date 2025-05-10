@@ -1,6 +1,5 @@
 import type { Document } from '../models/document.model'
 import { DocumentsCardElement } from './documents-card-element'
-import { getDocuments } from '../repositories/get-documents.repository'
 
 export class DocumentsCards extends HTMLElement {
   private documents: Document[] = []
@@ -9,13 +8,9 @@ export class DocumentsCards extends HTMLElement {
     super()
   }
 
-  async connectedCallback() {
-    try {
-      this.documents = await getDocuments()
-      this.render()
-    } catch (error) {
-      console.error('Error to load documents:', error)
-    }
+  setDocuments(docs: Document[]) {
+    this.documents = docs
+    this.render()
   }
 
   private render() {

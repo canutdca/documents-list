@@ -1,7 +1,6 @@
 import '../style.css'
 import type { Document } from '../models/document.model'
 import { DocumentsListElement } from './documents-list-element'
-import { getDocuments } from '../repositories/get-documents.repository'
 
 export class DocumentsList extends HTMLElement {
   private documents: Document[] = []
@@ -10,13 +9,9 @@ export class DocumentsList extends HTMLElement {
     super()
   }
 
-  async connectedCallback() {
-    try {
-      this.documents = await getDocuments()
-      this.render()
-    } catch (error) {
-      console.error('Error to load documents:', error)
-    }
+  setDocuments(docs: Document[]) {
+    this.documents = docs
+    this.render()
   }
 
   private render() {
@@ -40,10 +35,9 @@ export class DocumentsList extends HTMLElement {
         `
           )
           .join('')}
-      </article aria-label="List o">
+      </article>
     `
 
-    // Asignar cada documento a su respectivo documents-list-element
     const elements = this.querySelectorAll('documents-list-element')
     elements.forEach((element, index) => {
       ;(element as DocumentsListElement).setDocument(this.documents[index])
