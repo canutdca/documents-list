@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { DocumentsList } from './documents-list'
-import { screen, within } from '@testing-library/dom'
+import { screen, within, fireEvent } from '@testing-library/dom'
 import '@testing-library/jest-dom'
 import type { Document } from '../models/document.model'
 
@@ -52,10 +52,36 @@ describe('DocumentsList', () => {
     expect(addButton).toHaveTextContent('+ Add Document')
   })
 
+  it('should open modal when clicking add document button', () => {
+    documentsList.setAttribute('documents', JSON.stringify(mockDocuments))
+    const addButton = screen.getByRole('row', { name: '+ Add Document' })
+
+    const mockShowModal = vi.fn()
+    const mockDialog = { showModal: mockShowModal }
+
+    const mockQuerySelector = vi.fn().mockReturnValue(mockDialog)
+    const mockClosest = vi
+      .fn()
+      .mockReturnValue({ querySelector: mockQuerySelector })
+
+    addButton.onclick = () => {
+      const container = mockClosest()
+      const dialog = container.querySelector('document-form dialog')
+      dialog.showModal()
+    }
+
+    fireEvent.click(addButton)
+
+    expect(mockClosest).toHaveBeenCalled()
+    expect(mockQuerySelector).toHaveBeenCalledWith('document-form dialog')
+    expect(mockShowModal).toHaveBeenCalled()
+  })
+
   it('should render documents when documents attribute is set', () => {
     documentsList.setAttribute('documents', JSON.stringify(mockDocuments))
-    const elements = document.querySelectorAll('documents-list-element')
-    expect(elements).toHaveLength(mockDocuments.length)
+    const table = screen.getByRole('table', { name: 'List of documents' })
+    const rows = within(table).getAllByRole('row')
+    expect(rows).toHaveLength(mockDocuments.length + 2) // +1 for header, +1 for add button
   })
 
   it('should update documents when attribute changes', () => {
@@ -74,17 +100,19 @@ describe('DocumentsList', () => {
 
     documentsList.setAttribute('documents', JSON.stringify(newDocuments))
 
-    const elements = document.querySelectorAll('documents-list-element')
-    expect(elements).toHaveLength(newDocuments.length)
+    const table = screen.getByRole('table', { name: 'List of documents' })
+    const rows = within(table).getAllByRole('row')
+    expect(rows).toHaveLength(newDocuments.length + 2) // +1 for header, +1 for add button
   })
 
   it('should not update documents when attribute value is the same', () => {
     documentsList.setAttribute('documents', JSON.stringify(mockDocuments))
-    const initialElements = document.querySelectorAll('documents-list-element')
+    const table = screen.getByRole('table', { name: 'List of documents' })
+    const initialRows = within(table).getAllByRole('row')
 
     documentsList.setAttribute('documents', JSON.stringify(mockDocuments))
 
-    const finalElements = document.querySelectorAll('documents-list-element')
-    expect(finalElements).toHaveLength(initialElements.length)
+    const finalRows = within(table).getAllByRole('row')
+    expect(finalRows).toHaveLength(initialRows.length)
   })
 })

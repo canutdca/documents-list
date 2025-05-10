@@ -23,7 +23,7 @@ export class DocumentsList extends HTMLElement {
   private render() {
     this.innerHTML = `
       <article aria-label="List of documents" role="table">
-        <header role="rowgroup" class="grid grid-cols-3 gap-4 px-6 mb-4 text-sm text-gray-600">
+        <header role="row" class="grid grid-cols-3 gap-4 px-6 mb-4 text-sm text-gray-600">
           <div role="columnheader">
             <span>Name</span>
           </div>
