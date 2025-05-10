@@ -25,12 +25,13 @@ export class DocumentsContainer extends HTMLElement {
   }
 
   private render() {
-    this.innerHTML = `
-      <div class="flex justify-between items-center mb-6">
+    this.innerHTML = `     
+      <div class="flex justify-between items-center mb-6" role="toolbar" aria-label="Document view controls">
         <sort-documents></sort-documents>
         <view-selector></view-selector>
       </div>
-      <div id="documents-content" class="mt-8">
+
+      <div id="documents-content" class="mt-8" role="region">
         ${this.currentView === 'list' ? '<documents-list></documents-list>' : '<documents-cards></documents-cards>'}
       </div>
       <document-form></document-form>

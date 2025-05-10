@@ -29,23 +29,23 @@ export class ViewSelector extends HTMLElement {
 
   private render() {
     this.innerHTML = `
-      <div class="mt-4 flex items-center gap-4">
-        <div class="flex gap-2">
-          <button 
-            id="list-view" 
-            class="p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}"
-            aria-pressed="${this.currentView === 'list'}"
-          >
-            ${listIcon}
-          </button>
-          <button 
-            id="cards-view" 
-            class="p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'cards' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}"
-            aria-pressed="${this.currentView === 'cards'}"
-          >
-            ${gridIcon}
-          </button>
-        </div>
+      <div class="flex gap-2" role="radiogroup" aria-label="Select view type">
+        <button 
+          id="list-view" 
+          class="p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}"
+          aria-pressed="${this.currentView === 'list'}"
+          aria-label="List view"
+        >
+          ${listIcon}
+        </button>
+        <button 
+          id="cards-view" 
+          class="p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'cards' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}"
+          aria-pressed="${this.currentView === 'cards'}"
+          aria-label="Cards view"
+        >
+          ${gridIcon}
+        </button>
       </div>
     `
     this.setupEventListeners()

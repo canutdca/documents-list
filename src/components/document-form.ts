@@ -11,29 +11,46 @@ export class DocumentForm extends HTMLElement {
 
   private render() {
     this.innerHTML = `
-      <dialog class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-6 rounded-lg shadow-lg bg-white">
+      <dialog 
+        id="document-dialog" 
+        class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-6 rounded-lg shadow-lg bg-white"
+        aria-labelledby="dialog-title"
+        aria-describedby="dialog-description"
+      >
+        <header class="space-y-2 mb-4">
+          <h2 id="dialog-title" class="text-lg font-semibold">Create New Document</h2>
+          <p id="dialog-description" class="text-sm text-gray-600">
+            Fill in the document details below. All fields marked with an asterisk (*) are required.
+          </p>
+        </header>
+
         <form id="document-form" class="space-y-4">
-          <h2 class="text-xl font-bold text-gray-900">New Document</h2>
-          
-          <div class="space-y-2">
-            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+          <div>
+            <label for="document-name" class="block text-sm font-medium text-gray-700 mb-1">
+              Document Name <span class="text-red-500" aria-hidden="true">*</span>
+            </label>
             <input 
               type="text" 
-              id="name" 
+              id="document-name" 
               name="name" 
               required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-required="true"
             >
           </div>
 
-          <div class="space-y-2">
-            <label for="version" class="block text-sm font-medium text-gray-700">Version</label>
+          <div>
+            <label for="document-version" class="block text-sm font-medium text-gray-700 mb-1">
+              Version <span class="text-red-500" aria-hidden="true">*</span>
+            </label>
             <input 
-              type="text" 
-              id="version" 
+              type="number" 
+              id="document-version" 
               name="version" 
               required
+              min="1"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-required="true"
             >
           </div>
 
@@ -66,14 +83,17 @@ export class DocumentForm extends HTMLElement {
           <div class="flex justify-end gap-2 mt-6">
             <button 
               type="button"
-              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              id="cancel-btn"
+              class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
+              aria-label="Cancel document creation"
               onclick="this.closest('dialog').close()"
             >
               Cancel
             </button>
             <button 
               type="submit"
-              class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm"
+              aria-label="Create document"
             >
               Create
             </button>
@@ -81,7 +101,6 @@ export class DocumentForm extends HTMLElement {
         </form>
       </dialog>
     `
-
     this.setupEventListeners()
   }
 

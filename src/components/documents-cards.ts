@@ -26,7 +26,7 @@ export class DocumentsCards extends HTMLElement {
           )
           .join('')}
         <li>
-          <article class="bg-gray-50 rounded-lg p-6 shadow-sm h-full text-center cursor-pointerhover:bg-blue-50 transition-colors"
+          <article class="bg-gray-50 rounded-lg p-6 shadow-sm h-full text-center hover:bg-blue-50 transition-colors"
             onclick="this.closest('documents-container').querySelector('document-form dialog').showModal()">
             <div class="flex flex-col gap-4 items-center justify-center h-full">
               <span class="text-base text-blue-500">+ Add Document</span>

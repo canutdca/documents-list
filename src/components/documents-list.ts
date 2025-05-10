@@ -35,7 +35,7 @@ export class DocumentsList extends HTMLElement {
         `
           )
           .join('')}
-        <article role="row" class="grid grid-cols-3 gap-4 bg-gray-50 rounded-sm p-6 mb-4 shadow-sm cursor-pointer hover:bg-blue-50 transition-colors"
+        <article role="row" class="grid grid-cols-3 gap-4 bg-gray-50 rounded-sm p-6 mb-4 shadow-sm hover:bg-blue-50 transition-colors"
           onclick="this.closest('documents-container').querySelector('document-form dialog').showModal()">
           <div role="cell" class="flex items-center">
             <span class="text-base text-blue-500">+ Add Document</span>
