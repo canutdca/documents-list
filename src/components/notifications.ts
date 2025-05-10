@@ -1,16 +1,26 @@
 import { bellIcon } from '../icons/bell'
+import type { NotificationsRepository } from '../repositories/notifications.repository'
+import { WebSocketNotificationsRepository } from '../repositories/notifications.repository'
 
 export class Notifications extends HTMLElement {
   private count: number = 0
   private counterElement: HTMLElement | null = null
+  private repository: NotificationsRepository
 
-  constructor() {
+  constructor(
+    repository: NotificationsRepository = new WebSocketNotificationsRepository()
+  ) {
     super()
+    this.repository = repository
   }
 
   connectedCallback() {
     this.render()
-    this.setupWebSocket()
+    this.setupNotifications()
+  }
+
+  disconnectedCallback() {
+    this.repository.disconnect()
   }
 
   private render() {
@@ -34,25 +44,15 @@ export class Notifications extends HTMLElement {
     }
   }
 
-  private setupWebSocket() {
-    const ws = new WebSocket('ws://localhost:8080/notifications')
-
-    ws.onmessage = () => {
+  private setupNotifications() {
+    this.repository.onNewNotification(() => {
       this.count++
       if (this.count === 1) {
         this.render()
       } else {
         this.updateCounter()
       }
-    }
-
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error)
-    }
-
-    ws.onclose = () => {
-      console.log('WebSocket connection closed')
-    }
+    })
   }
 }
 
