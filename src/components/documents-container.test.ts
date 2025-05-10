@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { screen, waitFor } from '@testing-library/dom'
 import '@testing-library/jest-dom'
 import { DocumentsContainer } from './documents-container'
@@ -51,10 +51,6 @@ describe('DocumentsContainer', () => {
     await waitFor(() => {
       expect(document.querySelector('documents-container')).toBeInTheDocument()
     })
-  })
-
-  afterEach(() => {
-    document.body.innerHTML = ''
   })
 
   it('should render the documents-container element', () => {

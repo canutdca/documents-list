@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { DocumentsList } from './documents-list'
 import { screen, within } from '@testing-library/dom'
 import '@testing-library/jest-dom'
@@ -28,10 +28,6 @@ describe('DocumentsList', () => {
   beforeEach(() => {
     documentsList = new DocumentsList()
     document.body.appendChild(documentsList)
-  })
-
-  afterEach(() => {
-    document.body.innerHTML = ''
   })
 
   it('should render the documents list', () => {
