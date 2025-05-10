@@ -1,3 +1,6 @@
+import { listIcon } from '../icons/list'
+import { gridIcon } from '../icons/grid'
+
 export class ViewSelector extends HTMLElement {
   private currentView: 'list' | 'cards' = 'list'
 
@@ -14,48 +17,38 @@ export class ViewSelector extends HTMLElement {
     this.updateButtons()
   }
 
-  private render() {
-    this.innerHTML = `
-      <div class="mt-4 flex items-center gap-4">
-        <span class="text-sm text-gray-600">Display:</span>
-        <div class="flex gap-2">
-          <button 
-            id="list-view" 
-            class="px-3 py-1 rounded-md ${this.currentView === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600'} text-sm"
-            aria-pressed="${this.currentView === 'list'}"
-          >
-            List
-          </button>
-          <button 
-            id="cards-view" 
-            class="px-3 py-1 rounded-md ${this.currentView === 'cards' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600'} text-sm"
-            aria-pressed="${this.currentView === 'cards'}"
-          >
-            Cards
-          </button>
-        </div>
-      </div>
-    `
-    this.setupEventListeners()
-  }
-
   private updateButtons() {
     const listViewButton = this.querySelector('#list-view')
     const cardsViewButton = this.querySelector('#cards-view')
 
     if (!listViewButton || !cardsViewButton) return
 
-    listViewButton.className = `px-3 py-1 rounded-md ${this.currentView === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600'} text-sm`
-    listViewButton.setAttribute(
-      'aria-pressed',
-      String(this.currentView === 'list')
-    )
+    listViewButton.className = `p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`
+    cardsViewButton.className = `p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'cards' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`
+  }
 
-    cardsViewButton.className = `px-3 py-1 rounded-md ${this.currentView === 'cards' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600'} text-sm`
-    cardsViewButton.setAttribute(
-      'aria-pressed',
-      String(this.currentView === 'cards')
-    )
+  private render() {
+    this.innerHTML = `
+      <div class="mt-4 flex items-center gap-4">
+        <div class="flex gap-2">
+          <button 
+            id="list-view" 
+            class="p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}"
+            aria-pressed="${this.currentView === 'list'}"
+          >
+            ${listIcon}
+          </button>
+          <button 
+            id="cards-view" 
+            class="p-2 rounded-md transition-colors duration-200 hover:bg-blue-600 ${this.currentView === 'cards' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}"
+            aria-pressed="${this.currentView === 'cards'}"
+          >
+            ${gridIcon}
+          </button>
+        </div>
+      </div>
+    `
+    this.setupEventListeners()
   }
 
   private setupEventListeners() {
