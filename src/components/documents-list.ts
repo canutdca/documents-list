@@ -15,7 +15,7 @@ export class DocumentsList extends HTMLElement {
       this.documents = await getDocuments()
       this.render()
     } catch (error) {
-      console.error('Error al cargar los documentos:', error)
+      console.error('Error to load documents:', error)
     }
   }
 

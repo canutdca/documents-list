@@ -1,5 +1,5 @@
 export interface Document {
-  id: number
+  id: string
   name: string
   version: string
   contributors: string[]
