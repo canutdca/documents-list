@@ -9,9 +9,7 @@ export class WebSocketNotificationsRepository
   private ws: WebSocket | null = null
   private callbacks: (() => void)[] = []
 
-  constructor(
-    private readonly url: string = 'ws://localhost:8080/notifications'
-  ) {}
+  constructor(private readonly baseUrl: string = 'ws://localhost:8080/') {}
 
   onNewNotification(callback: () => void): void {
     this.callbacks.push(callback)
@@ -21,7 +19,7 @@ export class WebSocketNotificationsRepository
   private connect(): void {
     if (this.ws) return
 
-    this.ws = new WebSocket(this.url)
+    this.ws = new WebSocket(this.baseUrl + 'notifications')
 
     this.ws.onmessage = () => {
       this.callbacks.forEach((callback) => callback())

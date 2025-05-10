@@ -1,5 +1,8 @@
 import type { Document } from '../models/document.model'
-import { getDocuments } from '../repositories/get-documents.repository'
+import {
+  HttpDocumentsRepository,
+  type DocumentsRepository,
+} from '../repositories/documents.repository'
 
 interface ViewSelector extends HTMLElement {
   setView(view: 'list' | 'cards'): void
@@ -10,13 +13,15 @@ export class DocumentsContainer extends HTMLElement {
   private currentView: 'list' | 'cards' = 'list'
   private currentSort: string = ''
 
-  constructor() {
+  constructor(
+    private documentsRepository: DocumentsRepository = new HttpDocumentsRepository()
+  ) {
     super()
   }
 
   async connectedCallback() {
     try {
-      this.documents = await getDocuments()
+      this.documents = await this.documentsRepository.getDocuments()
       this.render()
       this.setupEventListeners()
     } catch (error) {
@@ -24,6 +29,15 @@ export class DocumentsContainer extends HTMLElement {
     }
   }
 
+  private getDocumentsToJson() {
+    return JSON.stringify(this.documents)
+  }
+
+  private getView(): string {
+    return this.currentView === 'list'
+      ? `<documents-list documents='${this.getDocumentsToJson()}'></documents-list>`
+      : `<documents-cards documents='${this.getDocumentsToJson()}'></documents-cards>`
+  }
   private render() {
     this.innerHTML = `     
       <div class="flex justify-between items-center mb-6" role="toolbar" aria-label="Document view controls">
@@ -31,12 +45,11 @@ export class DocumentsContainer extends HTMLElement {
         <view-selector></view-selector>
       </div>
 
-      <div id="documents-content" class="mt-8" role="region">
-        ${this.currentView === 'list' ? '<documents-list></documents-list>' : '<documents-cards></documents-cards>'}
+      <div id="documents-content" class="mt-8" role="region" aria-label="documents">
+        ${this.getView()}
       </div>
       <document-form></document-form>
     `
-    this.updateDocuments()
     this.updateViewSelector()
   }
 
@@ -47,11 +60,7 @@ export class DocumentsContainer extends HTMLElement {
         this.currentView = event.detail
         const content = this.querySelector('#documents-content')
         if (content) {
-          content.innerHTML =
-            this.currentView === 'list'
-              ? '<documents-list></documents-list>'
-              : '<documents-cards></documents-cards>'
-          this.updateDocuments()
+          content.innerHTML = this.getView()
         }
       }) as EventListener)
     }
@@ -103,13 +112,6 @@ export class DocumentsContainer extends HTMLElement {
     })
   }
 
-  private updateViewSelector() {
-    const viewSelector = this.querySelector('view-selector') as ViewSelector
-    if (viewSelector) {
-      viewSelector.setView(this.currentView)
-    }
-  }
-
   private updateDocuments() {
     const content = this.querySelector('#documents-content')
     if (!content) return
@@ -118,15 +120,16 @@ export class DocumentsContainer extends HTMLElement {
     if (!currentComponent) return
 
     if (this.currentView === 'list') {
-      const listComponent = currentComponent as HTMLElement & {
-        setDocuments: (docs: Document[]) => void
-      }
-      listComponent.setDocuments(this.documents)
+      currentComponent.setAttribute('documents', JSON.stringify(this.documents))
     } else {
-      const cardsComponent = currentComponent as HTMLElement & {
-        setDocuments: (docs: Document[]) => void
-      }
-      cardsComponent.setDocuments(this.documents)
+      currentComponent.setAttribute('documents', JSON.stringify(this.documents))
+    }
+  }
+
+  private updateViewSelector() {
+    const viewSelector = this.querySelector('view-selector') as ViewSelector
+    if (viewSelector) {
+      viewSelector.setView(this.currentView)
     }
   }
 }

@@ -4,13 +4,15 @@ import { DocumentsCardElement } from './documents-card-element'
 export class DocumentsCards extends HTMLElement {
   private documents: Document[] = []
 
-  constructor() {
-    super()
+  static get observedAttributes() {
+    return ['documents']
   }
 
-  setDocuments(docs: Document[]) {
-    this.documents = docs
-    this.render()
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === 'documents' && oldValue !== newValue) {
+      this.documents = JSON.parse(newValue)
+      this.render()
+    }
   }
 
   private render() {
