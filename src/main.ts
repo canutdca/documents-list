@@ -4,7 +4,9 @@ import './components/documents-list'
 import './components/documents-cards'
 import './components/view-selector'
 import './components/document-form'
-import './components/notifications'
+import './components/notifications-button'
+import './components/notifications-list'
+import './components/notifications-list-element'
 import './components/sort-documents'
 
 const container = document.getElementById('documents-container')

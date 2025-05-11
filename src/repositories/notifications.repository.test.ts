@@ -1,75 +1,120 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { WebSocketNotificationsRepository } from './notifications.repository'
+import type { Notification } from '../models/notification.model'
 
 describe('WebSocketNotificationsRepository', () => {
   let repository: WebSocketNotificationsRepository
   let mockWebSocket: WebSocket
-  let mockCallback: () => void
+  let mockCallback: (notification: Notification) => void
 
   beforeEach(() => {
-    mockCallback = vi.fn()
     mockWebSocket = {
+      send: vi.fn(),
+      close: vi.fn(),
       onmessage: null,
       onerror: null,
       onclose: null,
-      close: vi.fn(),
     } as unknown as WebSocket
 
-    vi.stubGlobal(
-      'WebSocket',
-      vi.fn().mockImplementation(() => mockWebSocket)
-    )
-    repository = new WebSocketNotificationsRepository()
+    const MockWebSocket = vi
+      .fn()
+      .mockImplementation(() => mockWebSocket) as unknown as typeof WebSocket
+    Object.defineProperties(MockWebSocket, {
+      CONNECTING: { value: 0 },
+      OPEN: { value: 1 },
+      CLOSING: { value: 2 },
+      CLOSED: { value: 3 },
+    })
+    global.WebSocket = MockWebSocket
+
+    repository = new WebSocketNotificationsRepository('ws://test-url/')
+    mockCallback = vi.fn()
   })
 
   afterEach(() => {
     vi.clearAllMocks()
-    vi.unstubAllGlobals()
   })
 
-  it('should connect to WebSocket when registering a callback', () => {
+  it('should connect to WebSocket when registering callback', () => {
     repository.onNewNotification(mockCallback)
-    expect(WebSocket).toHaveBeenCalledWith('ws://localhost:8080/notifications')
+    expect(global.WebSocket).toHaveBeenCalledWith('ws://test-url/notifications')
   })
 
   it('should not create multiple WebSocket connections', () => {
     repository.onNewNotification(mockCallback)
     repository.onNewNotification(mockCallback)
-    expect(WebSocket).toHaveBeenCalledTimes(1)
+    expect(global.WebSocket).toHaveBeenCalledTimes(1)
   })
 
-  it('should call all registered callbacks when receiving a message', () => {
+  it('should handle incoming notifications', () => {
+    repository.onNewNotification(mockCallback)
+
+    const mockNotification = {
+      DocumentTitle: 'Test Document',
+      UserName: 'Test User',
+    }
+
+    const event = { data: JSON.stringify(mockNotification) }
+    mockWebSocket.onmessage?.(event as MessageEvent)
+
+    expect(mockCallback).toHaveBeenCalledWith({
+      documentName: mockNotification.DocumentTitle,
+      createdBy: mockNotification.UserName,
+    })
+  })
+
+  it('should handle multiple callbacks', () => {
     const mockCallback2 = vi.fn()
     repository.onNewNotification(mockCallback)
     repository.onNewNotification(mockCallback2)
 
-    mockWebSocket.onmessage!({} as MessageEvent)
-    expect(mockCallback).toHaveBeenCalled()
-    expect(mockCallback2).toHaveBeenCalled()
+    const mockNotification = {
+      DocumentTitle: 'Test Document',
+      UserName: 'Test User',
+    }
+
+    const event = { data: JSON.stringify(mockNotification) }
+    mockWebSocket.onmessage?.(event as MessageEvent)
+
+    expect(mockCallback).toHaveBeenCalledWith({
+      documentName: mockNotification.DocumentTitle,
+      createdBy: mockNotification.UserName,
+    })
+    expect(mockCallback2).toHaveBeenCalledWith({
+      documentName: mockNotification.DocumentTitle,
+      createdBy: mockNotification.UserName,
+    })
   })
 
-  it('should log error when WebSocket encounters an error', () => {
+  it('should handle WebSocket errors', () => {
     const consoleSpy = vi.spyOn(console, 'error')
     repository.onNewNotification(mockCallback)
 
-    mockWebSocket.onerror!({} as Event)
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'WebSocket error:',
-      expect.any(Object)
-    )
+    const mockError = new Event('error')
+    mockWebSocket.onerror?.(mockError)
+
+    expect(consoleSpy).toHaveBeenCalledWith('WebSocket error:', mockError)
   })
 
-  it('should log when WebSocket connection is closed', () => {
+  it('should handle WebSocket close', () => {
     const consoleSpy = vi.spyOn(console, 'log')
     repository.onNewNotification(mockCallback)
 
-    mockWebSocket.onclose!({} as CloseEvent)
+    const mockCloseEvent = new CloseEvent('close')
+    mockWebSocket.onclose?.(mockCloseEvent)
+
     expect(consoleSpy).toHaveBeenCalledWith('WebSocket connection closed')
   })
 
-  it('should close WebSocket connection when disconnecting', () => {
+  it('should disconnect WebSocket', () => {
     repository.onNewNotification(mockCallback)
     repository.disconnect()
+
     expect(mockWebSocket.close).toHaveBeenCalled()
+  })
+
+  it('should handle disconnect when no connection exists', () => {
+    repository.disconnect()
+    expect(mockWebSocket.close).not.toHaveBeenCalled()
   })
 })

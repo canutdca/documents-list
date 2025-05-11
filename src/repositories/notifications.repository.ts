@@ -1,5 +1,7 @@
+import type { Notification } from '../models/notification.model'
+
 export interface NotificationsRepository {
-  onNewNotification(callback: () => void): void
+  onNewNotification(callback: (notification: Notification) => void): void
   disconnect(): void
 }
 
@@ -7,11 +9,11 @@ export class WebSocketNotificationsRepository
   implements NotificationsRepository
 {
   private ws: WebSocket | null = null
-  private callbacks: (() => void)[] = []
+  private callbacks: ((notification: Notification) => void)[] = []
 
   constructor(private readonly baseUrl: string = 'ws://localhost:8080/') {}
 
-  onNewNotification(callback: () => void): void {
+  onNewNotification(callback: (notification: Notification) => void): void {
     this.callbacks.push(callback)
     this.connect()
   }
@@ -21,8 +23,14 @@ export class WebSocketNotificationsRepository
 
     this.ws = new WebSocket(this.baseUrl + 'notifications')
 
-    this.ws.onmessage = () => {
-      this.callbacks.forEach((callback) => callback())
+    this.ws.onmessage = (event) => {
+      const notifications: NotificationResponse = JSON.parse(event.data)
+      this.callbacks.forEach((callback) =>
+        callback({
+          documentName: notifications.DocumentTitle,
+          createdBy: notifications.UserName,
+        })
+      )
     }
 
     this.ws.onerror = (error) => {
@@ -41,4 +49,9 @@ export class WebSocketNotificationsRepository
       this.ws = null
     }
   }
+}
+
+interface NotificationResponse {
+  DocumentTitle: string
+  UserName: string
 }
