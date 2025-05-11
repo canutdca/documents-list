@@ -1,4 +1,4 @@
-import type { Notification } from '../models/notification.model'
+import type { Notification } from '../../models/notification.model'
 import { NotificationsListElement } from './notifications-list-element'
 
 export class NotificationsList extends HTMLElement {

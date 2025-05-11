@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { DocumentsCardElement } from './documents-card-element'
 import { screen, within } from '@testing-library/dom'
 import '@testing-library/jest-dom'
-import type { Document } from '../models/document.model'
+import type { Document } from '../../models/document.model'
 
 describe('DocumentsCardElement', () => {
   let element: DocumentsCardElement

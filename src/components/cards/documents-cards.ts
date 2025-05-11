@@ -1,4 +1,4 @@
-import type { Document } from '../models/document.model'
+import type { Document } from '../../models/document.model'
 import { DocumentsCardElement } from './documents-card-element'
 
 export class DocumentsCards extends HTMLElement {

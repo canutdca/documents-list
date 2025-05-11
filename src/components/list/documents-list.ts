@@ -1,5 +1,4 @@
-import '../style.css'
-import type { Document } from '../models/document.model'
+import type { Document } from '../../models/document.model'
 import { DocumentsListElement } from './documents-list-element'
 
 export class DocumentsList extends HTMLElement {

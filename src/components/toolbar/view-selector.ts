@@ -1,5 +1,5 @@
-import { listIcon } from '../icons/list'
-import { gridIcon } from '../icons/grid'
+import { listIcon } from '../../icons/list'
+import { gridIcon } from '../../icons/grid'
 
 export class ViewSelector extends HTMLElement {
   private currentView: 'list' | 'cards' = 'list'

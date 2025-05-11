@@ -1,4 +1,4 @@
-import type { Document } from '../models/document.model'
+import type { Document } from '../../models/document.model'
 
 export class DocumentsListElement extends HTMLElement {
   private document!: Document

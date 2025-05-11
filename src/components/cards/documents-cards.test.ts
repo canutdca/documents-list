@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { DocumentsCards } from './documents-cards'
 import { screen, fireEvent, within } from '@testing-library/dom'
 import '@testing-library/jest-dom'
-import type { Document } from '../models/document.model'
+import type { Document } from '../../models/document.model'
 
 describe('DocumentsCards', () => {
   let documentsCards: DocumentsCards

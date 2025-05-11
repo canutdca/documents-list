@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { NotificationsButton } from './notifications-button'
 import { screen } from '@testing-library/dom'
 import '@testing-library/jest-dom'
-import type { NotificationsRepository } from '../repositories/notifications.repository'
-import type { Notification } from '../models/notification.model'
+import type { NotificationsRepository } from '../../repositories/notifications.repository'
+import type { Notification } from '../../models/notification.model'
 import { NotificationsList } from './notifications-list'
 
 class MockNotificationsRepository implements NotificationsRepository {

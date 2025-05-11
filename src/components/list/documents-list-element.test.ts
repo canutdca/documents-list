@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { DocumentsListElement } from './documents-list-element'
 import { screen, within } from '@testing-library/dom'
 import '@testing-library/jest-dom'
-import type { Document } from '../models/document.model'
+import type { Document } from '../../models/document.model'
 
 describe('DocumentsListElement', () => {
   let element: DocumentsListElement

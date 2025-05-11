@@ -1,7 +1,7 @@
-import { bellIcon } from '../icons/bell'
-import type { NotificationsRepository } from '../repositories/notifications.repository'
-import { WebSocketNotificationsRepository } from '../repositories/notifications.repository'
-import type { Notification } from '../models/notification.model'
+import { bellIcon } from '../../icons/bell'
+import type { NotificationsRepository } from '../../repositories/notifications.repository'
+import { WebSocketNotificationsRepository } from '../../repositories/notifications.repository'
+import type { Notification } from '../../models/notification.model'
 import { NotificationsList } from './notifications-list'
 
 export class NotificationsButton extends HTMLElement {

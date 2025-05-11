@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { NotificationsListElement } from './notifications-list-element'
-import type { Notification } from '../models/notification.model'
+import type { Notification } from '../../models/notification.model'
 import { screen } from '@testing-library/dom'
 import '@testing-library/jest-dom'
 
