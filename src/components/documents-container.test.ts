@@ -47,7 +47,6 @@ describe('DocumentsContainer', () => {
     mockRepository = new MockDocumentsRepository(mockDocuments)
     container = new DocumentsContainer(mockRepository)
     document.body.appendChild(container)
-    // Esperamos a que el componente se inicialice
     await waitFor(() => {
       expect(document.querySelector('documents-container')).toBeInTheDocument()
     })

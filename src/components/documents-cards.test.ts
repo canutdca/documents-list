@@ -45,17 +45,14 @@ describe('DocumentsCards', () => {
     documentsCards.setAttribute('documents', JSON.stringify(mockDocuments))
     const addButton = screen.getByRole('article', { name: 'Add Document' })
 
-    // Mock del método showModal
     const mockShowModal = vi.fn()
     const mockDialog = { showModal: mockShowModal }
 
-    // Mock del querySelector para devolver nuestro dialog mockeado
     const mockQuerySelector = vi.fn().mockReturnValue(mockDialog)
     const mockClosest = vi
       .fn()
       .mockReturnValue({ querySelector: mockQuerySelector })
 
-    // Reemplazamos el método onclick con nuestro mock
     addButton.onclick = () => {
       const container = mockClosest()
       const dialog = container.querySelector('document-form dialog')
