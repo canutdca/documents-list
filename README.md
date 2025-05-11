@@ -136,6 +136,12 @@ Prettier is used for code formatting because:
 - [x] Allow the creation of a new document. New documents created by the user should be displayed in the list.
 - [x] Sort documents by name, version or creation date.
 
+### Optional features
+
+- [ ] Offline support
+- [x] Box notification system
+- [ ] Relative date formatting (e.g. "1 day ago")
+
 #### Document Management
 
 - View documents in list or card format
@@ -205,19 +211,18 @@ npm run test:e2e:debug
 
 ### High Priority
 
-- [ ] Offline support
-- [ ] Box notification system
-- [ ] Relative date formatting (e.g. "1 day ago")
+- Ensure 100% test coverage
+- More E2E tests
 
 ### Medium Priority
 
-- [ ] Create a custom component library for each UI element
-- [ ] Improve separation of concerns in the codebase
-- [ ] Refactor large WebComponents into smaller, more focused components
+- Create a custom component library for each UI element: modals, buttons, texts, inputs...
+- Improve separation of concerns in the codebase
+- Refactor large WebComponents into smaller, more focused components
 
 ### Low Priority
 
-- [ ] Dark mode support
+- Dark mode support
 
 ## License
 
