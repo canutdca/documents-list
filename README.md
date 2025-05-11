@@ -217,6 +217,11 @@ npm run test:e2e:debug
 
 ### High Priority
 
+- Set up GitHub Actions for CI/CD:
+  - Run tests and build after each Pull Request
+  - Run tests and deploy on merge to main branch
+- Implement Husky to run tests before each commit
+- Configure lint-staged with Husky to run linting on modified files before each commit
 - Ensure 100% test coverage
 - More E2E tests
 
