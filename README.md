@@ -9,6 +9,7 @@ A modern web application for managing and displaying documents with a clean and 
 ## Requirements
 
 - Node.js (v22.13.0 or higher)
+- Have the supplied server running on port 8080 (if you use another port, you can change it in the .env file or in the default values of config/env.ts).
 
 ## Getting Started
 
@@ -25,13 +26,19 @@ cd documents-list
 npm install
 ```
 
-3. Start the development server:
+3. (Optional) Create a .env file in the root directory of the project and add the following line:
+
+```
+API_URL=http://localhost:8080/
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+5. Open your browser and navigate to `http://localhost:5173`
 
 ## Technologies Used
 
