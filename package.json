@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": {
+    "name": "David Canut",
+    "url": "https://github.com/canutdca"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

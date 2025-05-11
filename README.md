@@ -1,73 +1,224 @@
-# Frontend Engineer challenge
+# Documents List
 
-We want you to build a web application that displays a list of documents that a customer has on their account.
+A modern web application for managing and displaying documents with a clean and intuitive interface.
 
-A document has a name, a list of contributors, a version number, and a list of attachments.
+## Author
+
+**David Canut** - [GitHub](https://github.com/canutdca)
+
+## Requirements
+
+- Node.js (v22.13.0 or higher)
+
+## Getting Started
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/documents-list.git
+cd documents-list
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the development server:
+
+```bash
+npm run dev
+```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+## Technologies Used
+
+### Web Components
+
+We've chosen Web Components as our core technology for several reasons:
+
+- **Native Browser Support**: No framework dependencies, resulting in smaller bundle sizes
+- **Encapsulation**: Shadow DOM provides style and markup isolation
+- **Reusability**: Components can be used across different projects
+- **Standards-based**: Built on web standards, ensuring long-term maintainability
+
+### Tailwind CSS
+
+Tailwind CSS was selected for styling because:
+
+- **Utility-first**: Rapid development with pre-built utility classes
+- **Customization**: Easy to customize and extend
+- **Performance**: Only includes the CSS you use in production
+- **Responsive**: Built-in responsive design utilities
+- **Modern**: Supports modern features like dark mode and CSS Grid
+
+### TypeScript
+
+TypeScript is used to:
+
+- **Type Safety**: Catch errors at compile time
+- **Better IDE Support**: Enhanced autocompletion and refactoring
+- **Documentation**: Types serve as inline documentation
+- **Maintainability**: Easier to maintain and refactor code
+
+### Vite
+
+Vite is our build tool because:
+
+- **Speed**: Extremely fast development server
+- **Modern**: Built for modern browsers
+- **Simple**: Zero configuration needed
+- **Optimized**: Production builds are optimized automatically
+
+### Vitest
+
+Vitest is used for unit testing because:
+
+- **Vite Integration**: Native integration with Vite for fast test execution
+- **TypeScript Support**: First-class TypeScript support
+- **Watch Mode**: Fast and reliable watch mode for development
+- **Compatible**: Compatible with Jest's API for easy migration
+- **Coverage**: Built-in coverage reporting
+- **UI**: Interactive UI for test debugging
+
+### Testing Library
+
+Testing Library is used for component testing because:
+
+- **User-Centric**: Tests from the user's perspective
+- **Accessibility**: Encourages accessible component design
+- **Maintainable**: Less brittle tests that focus on behavior
+- **Simple API**: Easy to use and understand
+- **Framework Agnostic**: Works with any framework
+- **Best Practices**: Promotes testing best practices
+
+### Playwright
+
+Playwright is used for end-to-end testing because:
+
+- **Cross-browser**: Tests run in Chromium, Firefox, and WebKit
+- **Modern**: Built for modern web applications
+- **Reliable**: Auto-waiting and auto-retry mechanisms
+- **Powerful**: Rich API for complex testing scenarios
+
+### Code Quality Tools
+
+#### ESLint
+
+ESLint is used for code linting because:
+
+- **Code Quality**: Enforces consistent code style
+- **Error Prevention**: Catches common programming errors
+- **Best Practices**: Enforces coding best practices
+- **Customizable**: Highly configurable rules
+- **TypeScript Support**: Full TypeScript integration
+- **Auto-fix**: Can automatically fix many issues
+
+#### Prettier
+
+Prettier is used for code formatting because:
+
+- **Consistency**: Enforces consistent code style
+- **Zero Configuration**: Works out of the box
+- **Multi-language**: Supports multiple languages
+- **Integration**: Works well with ESLint
+- **Format on Save**: Can format code automatically
+- **Opinionated**: Reduces style debates
+
 ## Features
 
 ### Required features
 
-1. Display the most recent documents created, as a list view or as a grid view.
-2. Display a notification to the user (in real time), when a new document is being
-   created by other users.
-3. Allow the creation of a new document. New documents created by the user should be displayed in the list.
-4. Sort documents by name, version or creation date.
+- [x] Display the most recent documents created, as a list view or as a grid view.
+- [x] Display a notification to the user (in real time), when a new document is being created by other users.
+- [x] Allow the creation of a new document. New documents created by the user should be displayed in the list.
+- [x] Sort documents by name, version or creation date.
 
-The documents’ data will be exposed in a simple web server that responds to requests with JSON responses over HTTP. The real time notifications will be emitted through a websocket connection. See more details about the server in the [server directory](server).
+#### Document Management
 
-### Optional features
+- View documents in list or card format
+- Sort documents by name, version, or creation date
+- Add new documents with metadata
+- Real-time updates when documents are added
 
-These features are optional, however if you completed the previous features and want to continue, here are some ideas:
+#### User Interface
 
-1. Offline support.
-2. Box notification.
-3. Display dates in a relative format (e.g. "1 day ago").
+- Responsive design that works on all devices
+- Clean and modern interface using Tailwind CSS
+- Accessible components following ARIA standards
 
-<p align="center">
-  <img src="assets/sfe_1.png" height="auto" width="auto" alt="Screenshot 1">
-  <img src="assets/sfe_2.png" height="auto" width="auto" alt="Screenshot 2">
-</p>
+#### View Options
 
-## Tasks
+- Toggle between list and card views
+- List view for detailed information
+- Card view for visual browsing
+- Persistent view preference
 
-Your task is to write a well-organized, robust and scalable application taking the following into account:
+#### Document Form
 
-- Models the described problem with a suitable application structure that allow to add new features and to change requirements in a sustainable way
-- Implement the UI, based on the provided mockups (see attachments)
-- Implement different type of tests that ensure the correctness of the solution
-- The application must be supported in the latest two versions of Chrome
-- Implement the integrations with the sample server provided
-- Include a README.md explaining your reasonings, ideas, and how to execute your
-  code and run the tests
+- Add new documents with required metadata
+- Form validation
+- Real-time feedback
+- Modal dialog for better UX
 
-## Server integration
+## Testing
 
-There are two data sources you can consume data from:
+### Unit Tests
 
-1. The document's data is exposed in a JSON over HTTP API.
-2. The real-time notifications are emitted through a websocket connection.
+Run unit tests with:
 
-You should set up and integrate with the testing server in the [server directory](server).
+```bash
+npm test
+```
 
-## Requirements and additional notes
+### Unit Test Coverage
 
-- Provide source code through a public source code system (GitHub, GitLab...). **Don't show any reference to Holded in the repository**.
-- Do not use frameworks such as React, Angular, Socket.io, etc.
-- In case you need to include a library, please include a note explaining why it’s
-  needed and which other alternatives you considered and the reasoning behind it
-- Response format and examples can be found in the [server directory](server)
-- There is not an API call to create a new document. You should add the document in frontend memory.
-- Usage of Typescript is allowed.
-- Usage of 3rd party plugins to facilitate development and testing is allowed.
+Run tests with coverage report:
 
-## Things we are looking for with this challenge
+```bash
+npm run test:coverage
+```
 
-- Maintainable and well-written code.
-- You should strive for an optimal solution, but keep in mind maintainability over
-  premature optimization.
-- Ability to write well-written code over using a concrete framework.
-- Ability to write automated tests at different levels.
+### End-to-End Tests
 
-<p align="center">
-  <img src="https://europe-west1-holded-analytics-dev-208b.cloudfunctions.net/image_tracker/challenges-frontend.png?id=challenges-frontend.md" title="logo">
-</p>
+Run E2E tests with:
+
+```bash
+npm run test:e2e
+```
+
+For E2E tests with UI:
+
+```bash
+npm run test:e2e:ui
+```
+
+For E2E tests in debug mode:
+
+```bash
+npm run test:e2e:debug
+```
+
+## Pending Features
+
+### High Priority
+
+- [ ] Offline support
+- [ ] Box notification system
+- [ ] Relative date formatting (e.g. "1 day ago")
+
+### Medium Priority
+
+- [ ] Create a custom component library for each UI element
+- [ ] Improve separation of concerns in the codebase
+- [ ] Refactor large WebComponents into smaller, more focused components
+
+### Low Priority
+
+- [ ] Dark mode support
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
