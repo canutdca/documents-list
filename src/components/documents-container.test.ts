@@ -5,6 +5,10 @@ import { DocumentsContainer } from './documents-container'
 import type { Document } from '../models/document.model'
 import type { DocumentsRepository } from '../repositories/documents.repository'
 
+class MockViewSelector extends HTMLElement {
+  setView(): void {}
+}
+
 class MockDocumentsRepository implements DocumentsRepository {
   private documents: Document[] = []
 
@@ -44,6 +48,9 @@ describe('DocumentsContainer', () => {
   ]
 
   beforeEach(async () => {
+    if (!customElements.get('view-selector')) {
+      customElements.define('view-selector', MockViewSelector)
+    }
     mockRepository = new MockDocumentsRepository(mockDocuments)
     container = new DocumentsContainer(mockRepository)
     document.body.appendChild(container)
