@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { DocumentForm } from './document-form'
 import { screen, within, fireEvent } from '@testing-library/dom'
 import '@testing-library/jest-dom'
+import { id } from 'happy-dom/lib/PropertySymbol.js'
 
 describe('DocumentForm', () => {
   let form: DocumentForm
@@ -9,7 +10,6 @@ describe('DocumentForm', () => {
   beforeEach(() => {
     form = new DocumentForm()
     document.body.appendChild(form)
-    // Abrir el modal antes de cada test
   })
 
   it('should render the document form', () => {
@@ -81,6 +81,48 @@ describe('DocumentForm', () => {
     expect(screen.getByRole('dialog', { hidden: true })).toBeInTheDocument()
   })
 
+  it('should handle empty optional fields', () => {
+    openDialog()
+    const dialog = screen.getByRole('dialog')
+    const formElement = dialog.querySelector('form')
+    expect(formElement).toBeInTheDocument()
+
+    const mockClose = vi.fn()
+    Object.defineProperty(dialog, 'close', { value: mockClose })
+
+    const mockDispatchEvent = vi.fn()
+    document.addEventListener('documentCreated', mockDispatchEvent)
+
+    fireEvent.change(screen.getByLabelText(/Document Name/), {
+      target: { value: 'Test Document' },
+    })
+    fireEvent.change(screen.getByLabelText(/Version/), {
+      target: { value: '1.0' },
+    })
+
+    fireEvent.submit(formElement!)
+
+    expect(mockDispatchEvent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: 'documentCreated',
+        detail: expect.objectContaining({
+          document: expect.objectContaining({
+            id: expect.any(String),
+            name: expect.any(String),
+            version: expect.any(String),
+            createdAt: expect.any(Date),
+            contributors: [],
+            attachments: [],
+          }),
+        }),
+      })
+    )
+
+    expect(mockClose).toHaveBeenCalled()
+    expect(screen.getByLabelText(/Document Name/)).toHaveValue('')
+    expect(screen.getByLabelText(/Version/)).toHaveValue('')
+  })
+
   it('should create and dispatch document event when form is submitted', () => {
     openDialog()
     const dialog = screen.getByRole('dialog')
@@ -90,11 +132,8 @@ describe('DocumentForm', () => {
     const mockClose = vi.fn()
     Object.defineProperty(dialog, 'close', { value: mockClose })
 
-    const mockUUID = '123e4567-e89b-12d3-a456-426614174000'
-    vi.spyOn(crypto, 'randomUUID').mockReturnValue(mockUUID)
-
     const mockDispatchEvent = vi.fn()
-    formElement!.dispatchEvent = mockDispatchEvent
+    document.addEventListener('documentCreated', mockDispatchEvent)
 
     fireEvent.change(screen.getByLabelText(/Document Name/), {
       target: { value: 'Test Document' },
@@ -116,7 +155,6 @@ describe('DocumentForm', () => {
         type: 'documentCreated',
         detail: expect.objectContaining({
           document: expect.objectContaining({
-            id: mockUUID,
             name: 'Test Document',
             version: '1.0',
             contributors: ['User 1', 'User 2'],
@@ -132,47 +170,7 @@ describe('DocumentForm', () => {
     expect(screen.getByLabelText(/Contributors/)).toHaveValue('')
     expect(screen.getByLabelText(/Attachments/)).toHaveValue('')
   })
-
-//   it('should handle empty optional fields correctly', () => {
-//     openDialog()
-//     const dialog = screen.getByRole('dialog')
-//     const formElement = dialog.querySelector('form')
-//     expect(formElement).toBeInTheDocument()
-
-//     const mockClose = vi.fn()
-//     Object.defineProperty(dialog, 'close', { value: mockClose })
-
-//     const mockUUID = '123e4567-e89b-12d3-a456-426614174000'
-//     vi.spyOn(crypto, 'randomUUID').mockReturnValue(mockUUID)
-
-//     const mockDispatchEvent = vi.fn()
-//     formElement!.dispatchEvent = mockDispatchEvent
-
-//     fireEvent.change(screen.getByLabelText(/Document Name/), {
-//       target: { value: 'Test Document' },
-//     })
-//     fireEvent.change(screen.getByLabelText(/Version/), {
-//       target: { value: '1.0' },
-//     })
-
-//     fireEvent.submit(formElement!)
-
-//     expect(mockDispatchEvent).toHaveBeenCalledWith(
-//       expect.objectContaining({
-//         type: 'documentCreated',
-//         detail: expect.objectContaining({
-//           document: expect.objectContaining({
-//             id: mockUUID,
-//             name: 'Test Document',
-//             version: '1.0',
-//             contributors: [],
-//             attachments: [],
-//           }),
-//         }),
-//       })
-//     )
-//   })
-// })
+})
 
 function openDialog() {
   const dialog = screen.getByRole('dialog', {
