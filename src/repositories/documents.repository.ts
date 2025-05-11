@@ -1,11 +1,13 @@
 import type { Document } from '../models/document.model'
+import { config } from '../config/env'
 
 export interface DocumentsRepository {
   getDocuments(): Promise<Document[]>
 }
 
 export class HttpDocumentsRepository implements DocumentsRepository {
-  constructor(private readonly baseUrl: string = 'http://localhost:8080/') {}
+  constructor(private readonly baseUrl: string = config.apiBaseUrl) {}
+
   async getDocuments(): Promise<Document[]> {
     return fetch(this.baseUrl + 'documents')
       .then((res) => res.json())

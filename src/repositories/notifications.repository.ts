@@ -1,4 +1,5 @@
 import type { Notification } from '../models/notification.model'
+import { config } from '../config/env'
 
 export interface NotificationsRepository {
   onNewNotification(callback: (notification: Notification) => void): void
@@ -11,7 +12,7 @@ export class WebSocketNotificationsRepository
   private ws: WebSocket | null = null
   private callbacks: ((notification: Notification) => void)[] = []
 
-  constructor(private readonly baseUrl: string = 'ws://localhost:8080/') {}
+  constructor(private readonly baseUrl: string = config.wsBaseUrl) {}
 
   onNewNotification(callback: (notification: Notification) => void): void {
     this.callbacks.push(callback)
