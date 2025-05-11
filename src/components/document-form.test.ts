@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { DocumentForm } from './document-form'
 import { screen, within, fireEvent } from '@testing-library/dom'
 import '@testing-library/jest-dom'
-import { id } from 'happy-dom/lib/PropertySymbol.js'
 
 describe('DocumentForm', () => {
   let form: DocumentForm

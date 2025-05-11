@@ -74,7 +74,7 @@ export class ViewSelector extends HTMLElement {
       this.currentView = 'list'
       this.updateView()
       const event = new CustomEvent('viewChange', {
-        detail: 'view',
+        detail: 'list',
         bubbles: true,
         composed: true,
       })
