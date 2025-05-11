@@ -47,7 +47,6 @@ npm run dev
 We've chosen Web Components as our core technology for several reasons:
 
 - **Native Browser Support**: No framework dependencies, resulting in smaller bundle sizes
-- **Encapsulation**: Shadow DOM provides style and markup isolation
 - **Reusability**: Components can be used across different projects
 - **Standards-based**: Built on web standards, ensuring long-term maintainability
 
@@ -223,16 +222,17 @@ npm run test:e2e:debug
 
 ### Medium Priority
 
-Currently, we pass the props to child components as a JSON string. Instead, we should pass an array of Document objects. Otherwise, we lose the Date object (of Documents)
-
+- Currently, we pass the props to child components as a JSON string. Instead, we should pass an array of Document objects. Otherwise, we lose the Date object (of Documents)
 - Create a custom component library for each UI element: modals, buttons, texts, inputs...
 - Improve separation of concerns in the codebase
 - Refactor large WebComponents into smaller, more focused components
 - Some components use a setter, while others use props. Unify this logic
+- CSS animations
 
 ### Low Priority
 
 - Dark mode support
+- Optimize memory for very large lists
 
 ## License
 
