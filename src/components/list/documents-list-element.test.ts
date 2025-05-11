@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { DocumentsListElement } from './documents-list-element'
 import { screen, within } from '@testing-library/dom'
 import '@testing-library/jest-dom'
@@ -9,15 +9,21 @@ describe('DocumentsListElement', () => {
   const mockDocument: Document = {
     id: '1',
     name: 'Test Document',
-    createdAt: new Date(),
+    createdAt: new Date('2024-03-20T12:00:00Z'),
     version: '1.0',
     contributors: ['User 1', 'User 2'],
     attachments: ['file1.pdf', 'file2.pdf'],
   }
 
   beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2024-03-20T13:00:00Z'))
     element = new DocumentsListElement()
     document.body.appendChild(element)
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   it('should render the document element', () => {
@@ -31,7 +37,8 @@ describe('DocumentsListElement', () => {
     const cells = within(row).getAllByRole('cell')
 
     expect(cells[0]).toHaveTextContent(mockDocument.name)
-    expect(cells[0]).toHaveTextContent(`v${mockDocument.version}`)
+    expect(cells[0]).toHaveTextContent(`Version ${mockDocument.version}`)
+    expect(cells[0]).toHaveTextContent('1 hour ago')
 
     mockDocument.contributors.forEach((contributor) => {
       expect(cells[1]).toHaveTextContent(contributor)
@@ -49,6 +56,8 @@ describe('DocumentsListElement', () => {
       ...mockDocument,
       name: 'Updated Document',
       version: '2.0',
+      createdAt: new Date('2024-03-20T12:30:00Z'),
+
       contributors: ['User 3'],
       attachments: ['file3.pdf'],
     }
@@ -59,7 +68,8 @@ describe('DocumentsListElement', () => {
     const cells = within(row).getAllByRole('cell')
 
     expect(cells[0]).toHaveTextContent(updatedDocument.name)
-    expect(cells[0]).toHaveTextContent(`v${updatedDocument.version}`)
+    expect(cells[0]).toHaveTextContent(`Version ${updatedDocument.version}`)
+    expect(cells[0]).toHaveTextContent('30 minutes ago')
 
     expect(cells[1]).toHaveTextContent(updatedDocument.contributors[0])
     expect(cells[1]).not.toHaveTextContent(mockDocument.contributors[0])

@@ -140,7 +140,7 @@ Prettier is used for code formatting because:
 
 - [ ] Offline support
 - [x] Box notification system
-- [ ] Relative date formatting (e.g. "1 day ago")
+- [x] Relative date formatting (e.g. "1 day ago")
 
 #### Document Management
 
@@ -216,9 +216,12 @@ npm run test:e2e:debug
 
 ### Medium Priority
 
+Currently, we pass the props to child components as a JSON string. Instead, we should pass an array of Document objects. Otherwise, we lose the Date object (of Documents)
+
 - Create a custom component library for each UI element: modals, buttons, texts, inputs...
 - Improve separation of concerns in the codebase
 - Refactor large WebComponents into smaller, more focused components
+- Some components use a setter, while others use props. Unify this logic
 
 ### Low Priority
 

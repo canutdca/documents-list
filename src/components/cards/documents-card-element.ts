@@ -1,4 +1,5 @@
 import type { Document } from '../../models/document.model'
+import { formatRelativeDate } from '../../utils/date.utils'
 
 export class DocumentsCardElement extends HTMLElement {
   private document!: Document
@@ -18,7 +19,8 @@ export class DocumentsCardElement extends HTMLElement {
         <div class="flex flex-col gap-4">
           <div>
             <h3 class="text-xl font-bold text-gray-900">${this.document.name}</h3>
-            <span class="text-sm text-gray-600">v${this.document.version}</span>
+            <div class="text-sm text-gray-600">Version ${this.document.version}</div>
+            <div class="text-sm text-gray-600">${formatRelativeDate(this.document.createdAt)}</div> 
           </div>
           
           <div>

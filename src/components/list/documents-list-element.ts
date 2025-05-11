@@ -1,4 +1,5 @@
 import type { Document } from '../../models/document.model'
+import { formatRelativeDate } from '../../utils/date.utils'
 
 export class DocumentsListElement extends HTMLElement {
   private document!: Document
@@ -17,7 +18,8 @@ export class DocumentsListElement extends HTMLElement {
       <article role="row" class="grid grid-cols-3 gap-4 bg-white rounded-sm p-6 mb-4 shadow-sm">
         <div role="cell">
           <h3 class="text-xl font-bold text-gray-900">${this.document.name}</h3>
-          <span class="text-sm text-gray-600">v${this.document.version}</span>
+          <div class="text-sm text-gray-600">Version ${this.document.version}</div>
+          <div class="text-sm text-gray-600">${formatRelativeDate(this.document.createdAt)}</div>
         </div>
         <div role="cell">
           ${this.document.contributors

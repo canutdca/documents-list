@@ -21,6 +21,7 @@ export class HttpDocumentsRepository implements DocumentsRepository {
       )
   }
 }
+
 type DocumentsResponse = DocumentResponse[]
 interface DocumentResponse {
   ID: string
